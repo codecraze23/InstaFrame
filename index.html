@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story Maker - Instagram Template Creator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+</head>
+<body>
+    <!-- Glassmorphism Navigation -->
+    <nav class="glass-nav">
+        <div class="nav-content">
+            <div class="logo">
+                <i class="fab fa-instagram"></i>
+                <span>Story Maker</span>
+            </div>
+            <div class="nav-actions">
+                <button class="glass-btn" id="saveProject">
+                    <i class="fas fa-save"></i>
+                    <span>Save</span>
+                </button>
+                <button class="glass-btn" id="loadProject">
+                    <i class="fas fa-folder-open"></i>
+                    <span>Load</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Canvas Area -->
+        <div class="canvas-container">
+            <div class="canvas-wrapper">
+                <canvas id="storyCanvas"></canvas>
+            </div>
+            
+            <!-- Canvas Controls -->
+            <div class="canvas-controls">
+                <button class="control-btn" id="undoBtn">
+                    <i class="fas fa-undo"></i>
+                </button>
+                <button class="control-btn" id="redoBtn">
+                    <i class="fas fa-redo"></i>
+                </button>
+                <button class="control-btn" id="clearCanvas">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="toolbar glass-panel">
+            <div class="toolbar-tabs">
+                <button class="tab-btn active" data-tab="templates">
+                    <i class="fas fa-images"></i>
+                    <span>Templates</span>
+                </button>
+                <button class="tab-btn" data-tab="text">
+                    <i class="fas fa-font"></i>
+                    <span>Text</span>
+                </button>
+                <button class="tab-btn" data-tab="backgrounds">
+                    <i class="fas fa-palette"></i>
+                    <span>Backgrounds</span>
+                </button>
+                <button class="tab-btn" data-tab="stickers">
+                    <i class="fas fa-smile"></i>
+                    <span>Stickers</span>
+                </button>
+                <button class="tab-btn" data-tab="shapes">
+                    <i class="fas fa-shapes"></i>
+                    <span>Shapes</span>
+                </button>
+                <button class="tab-btn" data-tab="export">
+                    <i class="fas fa-download"></i>
+                    <span>Export</span>
+                </button>
+            </div>
+
+            <!-- Tab Contents -->
+            <div class="tab-content">
+                <!-- Templates Tab -->
+                <div class="tab-panel active" id="templates">
+                    <h3>Story Templates</h3>
+                    <div class="templates-grid">
+                        <div class="template-item" data-template="birthday">
+                            <div class="template-preview birthday-template">
+                                <i class="fas fa-birthday-cake"></i>
+                                <span>Birthday</span>
+                            </div>
+                        </div>
+                        <div class="template-item" data-template="sale">
+                            <div class="template-preview sale-template">
+                                <i class="fas fa-tag"></i>
+                                <span>Sale</span>
+                            </div>
+                        </div>
+                        <div class="template-item" data-template="quote">
+                            <div class="template-preview quote-template">
+                                <i class="fas fa-quote-left"></i>
+                                <span>Quote</span>
+                            </div>
+                        </div>
+                        <div class="template-item" data-template="travel">
+                            <div class="template-preview travel-template">
+                                <i class="fas fa-plane"></i>
+                                <span>Travel</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Text Tab -->
+                <div class="tab-panel" id="text">
+                    <h3>Add Text</h3>
+                    <div class="text-controls">
+                        <input type="text" id="textInput" placeholder="Enter your text..." class="glass-input">
+                        <button class="primary-btn" id="addText">Add Text</button>
+                        
+                        <div class="font-selector">
+                            <label>Font Family:</label>
+                            <select id="fontFamily" class="glass-select">
+                                <option value="Poppins">Poppins</option>
+                                <option value="Montserrat">Montserrat</option>
+                                <option value="Bebas Neue">Bebas Neue</option>
+                                <option value="Arial">Arial</option>
+                                <option value="Helvetica">Helvetica</option>
+                            </select>
+                        </div>
+
+                        <div class="font-size-control">
+                            <label>Font Size:</label>
+                            <input type="range" id="fontSize" min="12" max="120" value="32" class="glass-slider">
+                            <span id="fontSizeValue">32px</span>
+                        </div>
+
+                        <div class="text-effects">
+                            <button class="effect-btn" id="gradientText">
+                                <i class="fas fa-fill-drip"></i>
+                                Gradient
+                            </button>
+                            <button class="effect-btn" id="outlineText">
+                                <i class="far fa-square"></i>
+                                Outline
+                            </button>
+                            <button class="effect-btn" id="shadowText">
+                                <i class="fas fa-clone"></i>
+                                Shadow
+                            </button>
+                        </div>
+
+                        <div class="color-picker-section">
+                            <label>Text Color:</label>
+                            <input type="color" id="textColor" value="#ffffff" class="color-picker">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backgrounds Tab -->
+                <div class="tab-panel" id="backgrounds">
+                    <h3>Backgrounds</h3>
+                    <div class="background-options">
+                        <div class="upload-section">
+                            <input type="file" id="backgroundUpload" accept="image/*" style="display: none;">
+                            <button class="upload-btn" onclick="document.getElementById('backgroundUpload').click()">
+                                <i class="fas fa-upload"></i>
+                                Upload Image
+                            </button>
+                        </div>
+
+                        <div class="gradient-section">
+                            <h4>Gradients</h4>
+                            <div class="gradient-grid">
+                                <div class="gradient-item" data-gradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"></div>
+                                <div class="gradient-item" data-gradient="linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"></div>
+                                <div class="gradient-item" data-gradient="linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"></div>
+                                <div class="gradient-item" data-gradient="linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)"></div>
+                                <div class="gradient-item" data-gradient="linear-gradient(135deg, #fa709a 0%, #fee140 100%)"></div>
+                                <div class="gradient-item" data-gradient="linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)"></div>
+                            </div>
+                        </div>
+
+                        <div class="solid-colors">
+                            <h4>Solid Colors</h4>
+                            <input type="color" id="solidColor" value="#ffffff" class="color-picker">
+                            <button class="primary-btn" id="applySolidColor">Apply Color</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stickers Tab -->
+                <div class="tab-panel" id="stickers">
+                    <h3>Stickers & Emojis</h3>
+                    <div class="stickers-content">
+                        <div class="emoji-section">
+                            <h4>Emojis</h4>
+                            <div class="emoji-grid">
+                                <span class="emoji-item">😀</span>
+                                <span class="emoji-item">😍</span>
+                                <span class="emoji-item">🥳</span>
+                                <span class="emoji-item">😎</span>
+                                <span class="emoji-item">🔥</span>
+                                <span class="emoji-item">💖</span>
+                                <span class="emoji-item">✨</span>
+                                <span class="emoji-item">🌟</span>
+                                <span class="emoji-item">💯</span>
+                                <span class="emoji-item">🎉</span>
+                                <span class="emoji-item">🎊</span>
+                                <span class="emoji-item">💫</span>
+                            </div>
+                        </div>
+
+                        <div class="sticker-upload">
+                            <input type="file" id="stickerUpload" accept="image/*" style="display: none;">
+                            <button class="upload-btn" onclick="document.getElementById('stickerUpload').click()">
+                                <i class="fas fa-upload"></i>
+                                Upload Sticker
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shapes Tab -->
+                <div class="tab-panel" id="shapes">
+                    <h3>Shapes & Frames</h3>
+                    <div class="shapes-content">
+                        <div class="shapes-grid">
+                            <button class="shape-btn" data-shape="circle">
+                                <i class="far fa-circle"></i>
+                                Circle
+                            </button>
+                            <button class="shape-btn" data-shape="rectangle">
+                                <i class="far fa-square"></i>
+                                Rectangle
+                            </button>
+                            <button class="shape-btn" data-shape="triangle">
+                                <i class="fas fa-play" style="transform: rotate(90deg)"></i>
+                                Triangle
+                            </button>
+                        </div>
+
+                        <div class="shape-controls">
+                            <div class="color-control">
+                                <label>Shape Color:</label>
+                                <input type="color" id="shapeColor" value="#ff6b6b" class="color-picker">
+                            </div>
+                            <div class="opacity-control">
+                                <label>Opacity:</label>
+                                <input type="range" id="shapeOpacity" min="0" max="1" step="0.1" value="0.8" class="glass-slider">
+                                <span id="opacityValue">80%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export Tab -->
+                <div class="tab-panel" id="export">
+                    <h3>Export Story</h3>
+                    <div class="export-options">
+                        <div class="export-format">
+                            <label>Format:</label>
+                            <select id="exportFormat" class="glass-select">
+                                <option value="png">PNG (Transparent)</option>
+                                <option value="jpeg">JPEG (Solid)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="export-quality">
+                            <label>Quality:</label>
+                            <select id="exportQuality" class="glass-select">
+                                <option value="1">High (1080x1920)</option>
+                                <option value="0.8">Medium (864x1536)</option>
+                                <option value="0.6">Low (648x1152)</option>
+                            </select>
+                        </div>
+
+                        <button class="download-btn" id="downloadStory">
+                            <i class="fas fa-download"></i>
+                            Download Story
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p>Creating your story...</p>
+    </div>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Navigation */
+        .glass-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 0;
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .logo i {
+            font-size: 1.5rem;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .glass-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .glass-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .main-container {
+            display: flex;
+            gap: 2rem;
+            padding: 6rem 2rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        /* Canvas Container */
+        .canvas-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .canvas-wrapper {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        #storyCanvas {
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .canvas-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        /* Toolbar */
+        .toolbar {
+            width: 350px;
+            height: fit-content;
+            max-height: calc(100vh - 8rem);
+            overflow-y: auto;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .toolbar-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 80px;
+            padding: 0.5rem;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.8rem;
+        }
+
+        .tab-btn.active,
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .tab-content {
+            padding: 1.5rem;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        .tab-panel h3 {
+            color: white;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .tab-panel h4 {
+            color: rgba(255, 255, 255, 0.9);
+            margin: 1rem 0 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Form Elements */
+        .glass-input,
+        .glass-select {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .glass-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .glass-slider {
+            width: 100%;
+            margin: 0.5rem 0;
+        }
+
+        .color-picker {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+        }
+
+        /* Buttons */
+        .primary-btn,
+        .upload-btn,
+        .download-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .primary-btn:hover,
+        .upload-btn:hover,
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            font-size: 1.1rem;
+            padding: 1rem;
+        }
+
+        /* Templates Grid */
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .template-item {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .template-item:hover {
+            transform: scale(1.05);
+        }
+
+        .template-preview {
+            aspect-ratio: 9/16;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            color: white;
+            font-size: 0.9rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .birthday-template {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        }
+
+        .sale-template {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+
+        .quote-template {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
+        .travel-template {
+            background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);
+        }
+
+        /* Text Effects */
+        .text-effects {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .effect-btn {
+            flex: 1;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+        }
+
+        .effect-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Gradients */
+        .gradient-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .gradient-item {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .gradient-item:hover {
+            border-color: white;
+            transform: scale(1.1);
+        }
+
+        /* Emojis */
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .emoji-item {
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .emoji-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.2);
+        }
+
+        /* Shapes */
+        .shapes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .shape-btn {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            font-size: 0.8rem;
+        }
+
+        .shape-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 9999;
+            color: white;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                padding: 6rem 1rem 1rem;
+            }
+
+            .toolbar {
+                width: 100%;
+                order: -1;
+            }
+
+            .nav-content {
+                padding: 0 1rem;
+            }
+
+            .nav-actions {
+                gap: 0.5rem;
+            }
+
+            .glass-btn span {
+                display: none;
+            }
+
+            .toolbar-tabs {
+                justify-content: center;
+            }
+
+            .tab-btn {
+                min-width: 60px;
+                font-size: 0.7rem;
+            }
+
+            .templates-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .emoji-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .canvas-wrapper {
+                padding: 0.5rem;
+            }
+
+            .tab-content {
+                padding: 1rem;
+            }
+
+            .toolbar-tabs {
+                gap: 0.25rem;
+            }
+
+            .tab-btn {
+                padding: 0.4rem;
+                min-width: 50px;
+            }
+        }
+
+        /* Custom Scrollbar */
+        .toolbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .toolbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .toolbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+        }
+
+        .toolbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+
+    <script>
+        class StoryMaker {
+            constructor() {
+                this.canvas = null;
+                this.history = [];
+                this.historyStep = -1;
+                this.currentTemplate = null;
+                this.init();
+            }
+
+            init() {
+                this.setupCanvas();
+                this.setupEventListeners();
+                this.setupAnimations();
+            }
+
+            setupCanvas() {
+                const canvasElement = document.getElementById('storyCanvas');
+                this.canvas = new fabric.Canvas(canvasElement, {
+                    width: 360,
+                    height: 640,
+                    backgroundColor: '#ffffff'
+                });
+
+                // Scale canvas for mobile
+                if (window.innerWidth < 768) {
+                    const scale = Math.min(window.innerWidth * 0.8 / 360, 1);
+                    this.canvas.setDimensions({
+                        width: 360 * scale,
+                        height: 640 * scale
+                    });
+                    this.canvas.setZoom(scale);
+                }
+
+                this.saveState();
+            }
+
+            setupEventListeners() {
+                // Tab switching
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.addEventListener('click', () => this.switchTab(btn.dataset.tab));
+                });
+
+                // Text controls
+                document.getElementById('addText').addEventListener('click', () => this.addText());
+                document.getElementById('fontSize').addEventListener('input', (e) => {
+                    document.getElementById('fontSizeValue').textContent = e.target.value + 'px';
+                });
+
+                // Shape opacity
+                document.getElementById('shapeOpacity').addEventListener('input', (e) => {
+                    document.getElementById('opacityValue').textContent = Math.round(e.target.value * 100) + '%';
+                });
+
+                // Canvas controls
+                document.getElementById('undoBtn').addEventListener('click', () => this.undo());
+                document.getElementById('redoBtn').addEventListener('click', () => this.redo());
+                document.getElementById('clearCanvas').addEventListener('click', () => this.clearCanvas());
+
+                // Templates
+                document.querySelectorAll('.template-item').forEach(item => {
+                    item.addEventListener('click', () => this.applyTemplate(item.dataset.template));
+                });
+
+                // Gradients
+                document.querySelectorAll('.gradient-item').forEach(item => {
+                    item.addEventListener('click', () => this.applyGradientBackground(item.dataset.gradient));
+                });
+
+                //
+                // Gradients
+                document.querySelectorAll('.gradient-item').forEach(item => {
+                    item.addEventListener('click', () => this.applyGradientBackground(item.dataset.gradient));
+                });
+
+                // Solid color background
+                document.getElementById('applySolidColor').addEventListener('click', () => {
+                    const color = document.getElementById('solidColor').value;
+                    this.canvas.setBackgroundColor(color, this.canvas.renderAll.bind(this.canvas));
+                    this.saveState();
+                });
+
+                // Background upload
+                document.getElementById('backgroundUpload').addEventListener('change', (e) => this.handleBackgroundUpload(e));
+
+                // Sticker upload
+                document.getElementById('stickerUpload').addEventListener('change', (e) => this.handleStickerUpload(e));
+
+                // Emojis
+                document.querySelectorAll('.emoji-item').forEach(emoji => {
+                    emoji.addEventListener('click', () => this.addEmoji(emoji.textContent));
+                });
+
+                // Shapes
+                document.querySelectorAll('.shape-btn').forEach(btn => {
+                    btn.addEventListener('click', () => this.addShape(btn.dataset.shape));
+                });
+
+                // Text effects
+                document.getElementById('gradientText').addEventListener('click', () => this.applyTextEffect('gradient'));
+                document.getElementById('outlineText').addEventListener('click', () => this.applyTextEffect('outline'));
+                document.getElementById('shadowText').addEventListener('click', () => this.applyTextEffect('shadow'));
+
+                // Export
+                document.getElementById('downloadStory').addEventListener('click', () => this.exportStory());
+
+                // Save/Load project
+                document.getElementById('saveProject').addEventListener('click', () => this.saveProject());
+                document.getElementById('loadProject').addEventListener('click', () => this.loadProject());
+
+                // Canvas events
+                this.canvas.on('object:added', () => this.saveState());
+                this.canvas.on('object:removed', () => this.saveState());
+                this.canvas.on('object:modified', () => this.saveState());
+            }
+
+            setupAnimations() {
+                // Animate elements on load
+                gsap.from('.glass-nav', { duration: 1, y: -100, opacity: 0, ease: 'power3.out' });
+                gsap.from('.canvas-wrapper', { duration: 1, scale: 0.8, opacity: 0, ease: 'power3.out', delay: 0.2 });
+                gsap.from('.toolbar', { duration: 1, x: 100, opacity: 0, ease: 'power3.out', delay: 0.4 });
+            }
+
+            switchTab(tabName) {
+                // Update tab buttons
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+                // Update tab panels
+                document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+                document.getElementById(tabName).classList.add('active');
+
+                // Animate tab switch
+                gsap.from(`#${tabName}`, { duration: 0.3, opacity: 0, y: 20, ease: 'power2.out' });
+            }
+
+            addText() {
+                const textInput = document.getElementById('textInput');
+                const fontFamily = document.getElementById('fontFamily').value;
+                const fontSize = document.getElementById('fontSize').value;
+                const textColor = document.getElementById('textColor').value;
+
+                if (!textInput.value.trim()) return;
+
+                const text = new fabric.Text(textInput.value, {
+                    left: this.canvas.width / 2,
+                    top: this.canvas.height / 2,
+                    fontFamily: fontFamily,
+                    fontSize: parseInt(fontSize),
+                    fill: textColor,
+                    originX: 'center',
+                    originY: 'center',
+                    editable: true
+                });
+
+                this.canvas.add(text);
+                this.canvas.setActiveObject(text);
+                textInput.value = '';
+
+                // Animate text addition
+                text.set({ opacity: 0, scaleX: 0, scaleY: 0 });
+                this.canvas.renderAll();
+                
+                gsap.to(text, {
+                    duration: 0.5,
+                    opacity: 1,
+                    scaleX: 1,
+                    scaleY: 1,
+                    ease: 'back.out(1.7)',
+                    onUpdate: () => this.canvas.renderAll()
+                });
+            }
+
+            applyTextEffect(effect) {
+                const activeObject = this.canvas.getActiveObject();
+                if (!activeObject || activeObject.type !== 'text') return;
+
+                switch (effect) {
+                    case 'gradient':
+                        const gradient = new fabric.Gradient({
+                            type: 'linear',
+                            coords: { x1: 0, y1: 0, x2: activeObject.width, y2: 0 },
+                            colorStops: [
+                                { offset: 0, color: '#ff6b6b' },
+                                { offset: 0.5, color: '#4ecdc4' },
+                                { offset: 1, color: '#45b7d1' }
+                            ]
+                        });
+                        activeObject.set('fill', gradient);
+                        break;
+                    
+                    case 'outline':
+                        activeObject.set({
+                            fill: 'transparent',
+                            stroke: '#ffffff',
+                            strokeWidth: 3
+                        });
+                        break;
+                    
+                    case 'shadow':
+                        activeObject.set({
+                            shadow: {
+                                color: 'rgba(0,0,0,0.5)',
+                                blur: 10,
+                                offsetX: 5,
+                                offsetY: 5
+                            }
+                        });
+                        break;
+                }
+
+                this.canvas.renderAll();
+            }
+
+            applyTemplate(templateType) {
+                this.clearCanvas();
+                
+                switch (templateType) {
+                    case 'birthday':
+                        this.createBirthdayTemplate();
+                        break;
+                    case 'sale':
+                        this.createSaleTemplate();
+                        break;
+                    case 'quote':
+                        this.createQuoteTemplate();
+                        break;
+                    case 'travel':
+                        this.createTravelTemplate();
+                        break;
+                }
+
+                // Animate template application
+                gsap.from(this.canvas.getObjects(), {
+                    duration: 0.8,
+                    scale: 0,
+                    rotation: 360,
+                    opacity: 0,
+                    stagger: 0.1,
+                    ease: 'back.out(1.7)',
+                    onUpdate: () => this.canvas.renderAll()
+                });
+            }
+
+            createBirthdayTemplate() {
+                // Background gradient
+                this.canvas.setBackgroundColor({
+                    type: 'linear',
+                    coords: { x1: 0, y1: 0, x2: 0, y2: this.canvas.height },
+                    colorStops: [
+                        { offset: 0, color: '#ff9a9e' },
+                        { offset: 1, color: '#fecfef' }
+                    ]
+                }, this.canvas.renderAll.bind(this.canvas));
+
+                // Title text
+                const title = new fabric.Text('Happy Birthday!', {
+                    left: this.canvas.width / 2,
+                    top: 150,
+                    fontFamily: 'Bebas Neue',
+                    fontSize: 48,
+                    fill: '#ffffff',
+                    originX: 'center',
+                    originY: 'center',
+                    shadow: {
+                        color: 'rgba(0,0,0,0.3)',
+                        blur: 10,
+                        offsetX: 3,
+                        offsetY: 3
+                    }
+                });
+
+                // Decorative circle
+                const circle = new fabric.Circle({
+                    left: this.canvas.width / 2,
+                    top: this.canvas.height / 2,
+                    radius: 80,
+                    fill: 'rgba(255,255,255,0.2)',
+                    originX: 'center',
+                    originY: 'center'
+                });
+
+                // Birthday cake emoji
+                const cake = new fabric.Text('🎂', {
+                    left: this.canvas.width / 2,
+                    top: this.canvas.height / 2,
+                    fontSize: 60,
+                    originX: 'center',
+                    originY: 'center'
+                });
+
+                this.canvas.add(circle, title, cake);
+            }
+
+            createSaleTemplate() {
+                // Background
+                this.canvas.setBackgroundColor({
+                    type: 'linear',
+                    coords: { x1: 0, y1: 0, x2: 0, y2: this.canvas.height },
+                    colorStops: [
+                        { offset: 0, color: '#ffecd2' },
+                        { offset: 1, color: '#fcb69f' }
+                    ]
+                }, this.canvas.renderAll.bind(this.canvas));
+
+                // Sale badge
+                const badge = new fabric.Circle({
+                    left: this.canvas.width / 2,
+                    top: 200,
+                    radius: 60,
+                    fill: '#ff4757',
+                    originX: 'center',
+                    originY: 'center'
+                });
+
+                const saleText = new fabric.Text('SALE', {
+                    left: this.canvas.width / 2,
+                    top: 180,
+                    fontFamily: 'Bebas Neue',
+                    fontSize: 24,
+                    fill: '#ffffff',
+                    originX: 'center',
+                    originY: 'center'
+                });
+
+                const percentage = new fabric.Text('50% OFF', {
+                    left: this.canvas.width / 2,
+                    top: 220,
+                    fontFamily: 'Bebas Neue',
+                    fontSize: 16,
+                    fill: '#ffffff',
+                    originX: 'center',
+                    originY: 'center'
+                });
+
+                const title = new fabric.Text('MEGA SALE', {
+                    left: this.canvas.width / 2,
+                    top: 350,
+                    fontFamily: 'Bebas Neue',
+                    fontSize: 42,
+                    fill: '#2f3542',
+                    originX: 'center',
+                    originY: 'center'
+                });
+
+                this.canvas.add(badge, saleText, percentage, title);
+            }
+
+            createQuoteTemplate() {
+                // Background
+                this.canvas.setBackgroundColor({
+                    type: 'linear',
+                    coords: { x1: 0, y1: 0, x2: 0, y2: this.canvas.height },
+                    colorStops: [
+                        { offset: 0, color: '#a8edea' },
+                        { offset: 1, color: '#fed6e3' }
+                    ]
+                }, this.canvas.renderAll.bind(this.canvas));
+
+                // Quote marks
+                const leftQuote = new fabric.Text('"', {
+                    left: 50,
+                    top: 200,
+                    fontFamily: 'serif',
+                    fontSize: 80,
+                    fill: 'rgba(255,255,255,0.3)',
+                    originX: 'center',
+                    originY: 'center'
+                });
+
+                const rightQuote = new fabric.Text('"', {
+                    left: this.canvas.width - 50,
+                    top: 400,
+                    fontFamily: 'serif',
+                    fontSize: 80,
+                    fill: 'rgba(255,255,255,0.3)',
+                    originX: 'center',
+                    originY: 'center'
+                });
+
+                // Quote text
+                const quote = new fabric.Text('Your inspirational\nquote here', {
+                    left: this.canvas.width / 2,
+                    top: this.canvas.height / 2,
+                    fontFamily: 'Poppins',
+                    fontSize: 28,
+                    fill: '#2f3542',
+                    originX: 'center',
+                    originY: 'center',
+                    textAlign: 'center'
+                });
+
+                this.canvas.add(leftQuote, rightQuote, quote);
+            }
+
+            createTravelTemplate() {
+                // Background
+                this.canvas.setBackgroundColor({
+                    type: 'linear',
+                    coords: { x1: 0, y1: 0, x2: 0, y2: this.canvas.height },
+                    colorStops: [
+                        { offset: 0, color: '#d299c2' },
+                        { offset: 1, color: '#fef9d7' }
+                    ]
+                }, this.canvas.renderAll.bind(this.canvas));
+
+                // Plane emoji
+                const plane = new fabric.Text('✈️', {
+                    left: this.canvas.width / 2,
+                    top: 180,
+                    fontSize: 60,
+                    originX: 'center',
+                    originY: 'center'
+                });
+
+                // Title
+                const title = new fabric.Text('WANDERLUST', {
+                    left: this.canvas.width / 2,
+                    top: 300,
+                    fontFamily: 'Bebas Neue',
+                    fontSize: 36,
+                    fill: '#2f3542',
+                    originX: 'center',
+                    originY: 'center'
+                });
+
+                // Subtitle
+                const subtitle = new fabric.Text('Adventure Awaits', {
+                    left: this.canvas.width / 2,
+                    top: 350,
+                    fontFamily: 'Poppins',
+                    fontSize: 18,
+                    fill: '#57606f',
+                    originX: 'center',
+                    originY: 'center'
+                });
+
+                this.canvas.add(plane, title, subtitle);
+            }
+
+            applyGradientBackground(gradient) {
+                // Parse CSS gradient to Fabric.js format
+                const canvas = document.createElement('canvas');
+                canvas.width = this.canvas.width;
+                canvas.height = this.canvas.height;
+                const ctx = canvas.getContext('2d');
+                
+                // Create temporary element to get computed gradient
+                const tempDiv = document.createElement('div');
+                tempDiv.style.background = gradient;
+                tempDiv.style.width = '100px';
+                tempDiv.style.height = '100px';
+                document.body.appendChild(tempDiv);
+                
+                // Apply gradient as background
+                this.canvas.setBackgroundColor(gradient, this.canvas.renderAll.bind(this.canvas));
+                document.body.removeChild(tempDiv);
+                
+                this.saveState();
+            }
+
+            handleBackgroundUpload(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    fabric.Image.fromURL(e.target.result, (img) => {
+                        // Scale image to fit canvas
+                        const scaleX = this.canvas.width / img.width;
+                        const scaleY = this.canvas.height / img.height;
+                        const scale = Math.max(scaleX, scaleY);
+                        
+                        img.set({
+                            scaleX: scale,
+                            scaleY: scale,
+                            left: this.canvas.width / 2,
+                            top: this.canvas.height / 2,
+                            originX: 'center',
+                            originY: 'center',
+                            selectable: false
+                        });
+
+                        this.canvas.setBackgroundImage(img, this.canvas.renderAll.bind(this.canvas));
+                        this.saveState();
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+
+            handleStickerUpload(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    fabric.Image.fromURL(e.target.result, (img) => {
+                        img.set({
+                            left: this.canvas.width / 2,
+                            top: this.canvas.height / 2,
+                            originX: 'center',
+                            originY: 'center',
+                            scaleX: 0.5,
+                            scaleY: 0.5
+                        });
+
+                        this.canvas.add(img);
+                        this.canvas.setActiveObject(img);
+
+                        // Animate sticker addition
+                        img.set({ opacity: 0, scaleX: 0, scaleY: 0 });
+                        this.canvas.renderAll();
+                        
+                        gsap.to(img, {
+                            duration: 0.5,
+                            opacity: 1,
+                            scaleX: 0.5,
+                            scaleY: 0.5,
+                            ease: 'back.out(1.7)',
+                            onUpdate: () => this.canvas.renderAll()
+                        });
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+
+            addEmoji(emoji) {
+                const emojiText = new fabric.Text(emoji, {
+                    left: this.canvas.width / 2,
+                    top: this.canvas.height / 2,
+                    fontSize: 48,
+                    originX: 'center',
+                    originY: 'center'
+                });
+
+                this.canvas.add(emojiText);
+                this.canvas.setActiveObject(emojiText);
+
+                // Animate emoji addition
+                emojiText.set({ opacity: 0, scaleX: 0, scaleY: 0 });
+                this.canvas.renderAll();
+                
+                gsap.to(emojiText, {
+                    duration: 0.5,
+                    opacity: 1,
+                    scaleX: 1,
+                    scaleY: 1,
+                    ease: 'back.out(1.7)',
+                    onUpdate: () => this.canvas.renderAll()
+                });
+            }
+
+            addShape(shapeType) {
+                const color = document.getElementById('shapeColor').value;
+                const opacity = document.getElementById('shapeOpacity').value;
+                let shape;
+
+                switch (shapeType) {
+                    case 'circle':
+                        shape = new fabric.Circle({
+                            radius: 50,
+                            fill: color,
+                            opacity: opacity,
+                            left: this.canvas.width / 2,
+                            top: this.canvas.height / 2,
+                            originX: 'center',
+                            originY: 'center'
+                        });
+                        break;
+                    
+                    case 'rectangle':
+                        shape = new fabric.Rect({
+                            width: 100,
+                            height: 60,
+                            fill: color,
+                            opacity: opacity,
+                            left: this.canvas.width / 2,
+                            top: this.canvas.height / 2,
+                            originX: 'center',
+                            originY: 'center'
+                        });
+                        break;
+                    
+                    case 'triangle':
+                        shape = new fabric.Triangle({
+                            width: 80,
+                            height: 80,
+                            fill: color,
+                            opacity: opacity,
+                            left: this.canvas.width / 2,
+                            top: this.canvas.height / 2,
+                            originX: 'center',
+                            originY: 'center'
+                        });
+                        break;
+                }
+
+                if (shape) {
+                    this.canvas.add(shape);
+                    this.canvas.setActiveObject(shape);
+
+                    // Animate shape addition
+                    shape.set({ opacity: 0, scaleX: 0, scaleY: 0 });
+                    this.canvas.renderAll();
+                    
+                    gsap.to(shape, {
+                        duration: 0.5,
+                        opacity: opacity,
+                        scaleX: 1,
+                        scaleY: 1,
+                        ease: 'back.out(1.7)',
+                        onUpdate: () => this.canvas.renderAll()
+                    });
+                }
+            }
+
+            exportStory() {
+                const format = document.getElementById('exportFormat').value;
+                const quality = parseFloat(document.getElementById('exportQuality').value);
+                
+                // Show loading
+                document.getElementById('loadingOverlay').style.display = 'flex';
+
+                setTimeout(() => {
+                    // Create high-resolution canvas
+                    const exportCanvas = document.createElement('canvas');
+                    const exportWidth = 1080 * quality;
+                    const exportHeight = 1920 * quality;
+                    
+                    exportCanvas.width = exportWidth;
+                    exportCanvas.height = exportHeight;
+
+                    // Clone current canvas at higher resolution
+                    const tempCanvas = new fabric.Canvas(exportCanvas);
+                    tempCanvas.loadFromJSON(this.canvas.toJSON(), () => {
+                        // Scale all objects
+                        const scale = quality * 3; // 1080/360 = 3
+                        tempCanvas.setDimensions({
+                            width: exportWidth,
+                            height: exportHeight
+                        });
+
+                        tempCanvas.getObjects().forEach(obj => {
+                            obj.scaleX *= scale;
+                            obj.scaleY *= scale;
+                            obj.left *= scale;
+                            obj.top *= scale;
+                            if (obj.fontSize) {
+                                obj.fontSize *= scale;
+                            }
+                        });
+
+                        tempCanvas.renderAll();
+
+                        // Export
+                        const dataURL = tempCanvas.toDataURL({
+                            format: format,
+                            quality: 0.9,
+                            multiplier: 1
+                        });
+
+                        // Download
+                        const link = document.createElement('a');
+                        link.download = `instagram-story-${Date.now()}.${format}`;
+                        link.href = dataURL;
+                        link.click();
+
+                        // Hide loading
+                        document.getElementById('loadingOverlay').style.display = 'none';
+                    });
+                }, 500);
+            }
+
+            saveProject() {
+                const projectData = {
+                    canvas: this.canvas.toJSON(),
+                    timestamp: Date.now()
+                };
+                
+                localStorage.setItem('storyMakerProject', JSON.stringify(projectData));
+                
+                // Show success animation
+                gsap.to('.nav-content', {
+                    duration: 0.3,
+                    scale: 1.05,
+                    yoyo: true,
+                    repeat: 1,
+                    ease: 'power2.inOut'
+                });
+            }
+
+            loadProject() {
+                const projectData = localStorage.getItem('storyMakerProject');
+                if (!projectData) {
+                    alert('No saved project found!');
+                    return;
+                }
+
+                const data = JSON.parse(projectData);
+                this.canvas.loadFromJSON(data.canvas, () => {
+                    this.canvas.renderAll();
+                    this.saveState();
+                });
+            }
+
+            saveState() {
+                if (this.historyStep < this.history.length - 1) {
+                    this.history = this.history.slice(0, this.historyStep + 1);
+                }
+                
+                this.history.push(JSON.stringify(this.canvas.toJSON()));
+                this.historyStep++;
+                
+                // Limit history size
+                if (this.history.length > 20) {
+                    this.history.shift();
+                    this.historyStep--;
+                }
+            }
+
+            undo() {
+                if (this.historyStep > 0) {
+                    this.historyStep--;
+                    this.canvas.loadFromJSON(this.history[this.historyStep], () => {
+                        this.canvas.renderAll();
+                    });
+                }
+            }
+
+            redo() {
+                if (this.historyStep < this.history.length - 1) {
+                    this.historyStep++;
+                    this.canvas.loadFromJSON(this.history[this.historyStep], () => {
+                        this.canvas.renderAll();
+                    });
+                }
+            }
+
+            clearCanvas() {
+                this.canvas.clear();
+                this.canvas.setBackgroundColor('#ffffff', this.canvas.renderAll.bind(this.canvas));
+                this.saveState();
+            }
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new StoryMaker();
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            // Responsive canvas scaling would go here
+            // This is a simplified version - you might want more sophisticated responsive handling
+        });
+    </script>
+</body>
+</html>
